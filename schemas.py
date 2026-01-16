@@ -1,10 +1,21 @@
 from sqlmodel import SQLModel
+from typing import Optional
+from models import *
 
 class VideoCreate(SQLModel):
-    name: str
-    category: str
+    title: str
+    id_sub_category: int
 
 class VideoRead(SQLModel):
     id: int
+    title: str
+    file_name: str
+    file_ext: str
+    subcategory: Optional[SubCategory]
+
+class CategoryCreate(SQLModel):
     name: str
-    category: str
+
+class SubCategoryCreate(SQLModel):
+    name: str
+    id_category: str

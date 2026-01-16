@@ -2,7 +2,7 @@ from fastapi import FastAPI, Depends
 from sqlmodel import Session
 
 from database import engine, create_db_and_tables
-from schemas import VideoCreate, VideoRead
+from schemas import *
 from crud import create_video, get_videos
 
 app = FastAPI()
