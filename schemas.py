@@ -18,4 +18,10 @@ class CategoryCreate(SQLModel):
 
 class SubCategoryCreate(SQLModel):
     name: str
-    id_category: str
+    id_category: int
+
+class SubCategoryRead(SQLModel):
+    name: str
+    id: int
+    id_category: int
+    category: Optional[Category]

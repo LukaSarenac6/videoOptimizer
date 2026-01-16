@@ -36,3 +36,7 @@ def create_sub_category(session: Session, sub_category: SubCategoryCreate):
 def get_videos(session: Session):
     statement = select(Video)
     return session.exec(statement).all()
+
+def get_sub_categories(session: Session):
+    statement = select(SubCategory)
+    return session.exec(statement).all()
