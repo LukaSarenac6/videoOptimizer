@@ -1,12 +1,13 @@
 from sqlmodel import Session, select
 from models import *
 from schemas import *
+from fastapi import UploadFile
 
-def create_video(session: Session, video: VideoCreate) -> Video:
+def create_video(session: Session, id_sub_category: int, file: UploadFile) -> Video:
     db_video = Video (
-        title=video.title,
-        id_subcategory=video.id_sub_category,
-        file_name=f"{video.title}.mp4",
+        title=file.filename.split('.')[0],
+        id_subcategory=id_sub_category,
+        file_name=file.filename,
         file_ext="mp4"
     )
     session.add(db_video)

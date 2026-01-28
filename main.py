@@ -1,6 +1,6 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, UploadFile, Form
 from sqlmodel import Session
-
+from typing import Annotated
 from database import engine, create_db_and_tables
 from schemas import *
 from crud import *
@@ -14,10 +14,11 @@ def get_session():
 
 @app.post("/videos", response_model=VideoRead)
 def add_video(
-    video: VideoCreate,
+    id_sub_category: Annotated[int, Form()],
+    file:  UploadFile,
     session: Session = Depends(get_session)
 ):
-    return create_video(session, video)
+    return create_video(session, id_sub_category, file)
 
 @app.get("/videos", response_model=list[VideoRead])
 def read_videos(
