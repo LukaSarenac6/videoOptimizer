@@ -16,6 +16,11 @@ class VideoRead(SQLModel):
 class CategoryCreate(SQLModel):
     name: str
 
+class CategoryRead(SQLModel):
+    name: str
+    id: int
+    sub_categories: list[SubCategory] = []
+
 class SubCategoryCreate(SQLModel):
     name: str
     id_category: int
@@ -24,4 +29,4 @@ class SubCategoryRead(SQLModel):
     name: str
     id: int
     id_category: int
-    category: Optional[Category]
+    category: Category
