@@ -39,13 +39,13 @@ def read_sub_categories(
 ):
     return get_sub_categories(session)
 
-@app.get("/categories", response_model=list[Category])
+@app.get("/categories", response_model=list[CategoryRead])
 def read_categories(
     session: Session = Depends(get_session)
 ):
     return get_categories(session)
 
-@app.post("/category", response_model=CategoryCreate)
+@app.post("/category", response_model=CategoryRead)
 def add_category(
     category: CategoryCreate,
     session: Session = Depends(get_session)

@@ -3,6 +3,7 @@ from models import *
 from schemas import *
 from fastapi import UploadFile
 from storage import *
+from sqlalchemy.orm import selectinload
 
 def create_video(session: Session, id_sub_category: int, file: UploadFile) -> Video:
     db_video = Video (
@@ -54,5 +55,5 @@ def get_sub_categories(session: Session):
     return session.exec(statement).all()
 
 def get_categories(session: Session):
-    statement = select(Category)
+    statement = select(Category).options(selectinload(Category.sub_categories))
     return session.exec(statement).all()
