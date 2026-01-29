@@ -2,6 +2,7 @@ from sqlmodel import Session, select
 from models import *
 from schemas import *
 from fastapi import UploadFile
+from storage import *
 
 def create_video(session: Session, id_sub_category: int, file: UploadFile) -> Video:
     db_video = Video (
@@ -13,6 +14,7 @@ def create_video(session: Session, id_sub_category: int, file: UploadFile) -> Vi
     session.add(db_video)
     session.commit()
     session.refresh(db_video)
+    save_video(file, db_video.subcategory.name, db_video.subcategory.category.name)
     return db_video
 
 def create_category(session: Session, category: CategoryCreate):

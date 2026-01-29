@@ -6,8 +6,9 @@ UPLOAD_DIR = "videos"
 
 def save_video(file: UploadFile, sub_category: str, category: str):
     os.makedirs(UPLOAD_DIR, exist_ok=True)
+    dir_path = os.path.join(UPLOAD_DIR, category, sub_category)
     file_path = os.path.join(UPLOAD_DIR, category, sub_category, file.filename)
-    os.makedirs(file_path)
+    os.makedirs(dir_path)
     try:
         with open(file_path, "wb") as f:
             shutil.copyfileobj(file.file, f)
