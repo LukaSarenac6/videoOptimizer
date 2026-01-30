@@ -13,3 +13,6 @@ env/
 
 # Mac
 .DS_Store
+
+# Claude
+.claude/
