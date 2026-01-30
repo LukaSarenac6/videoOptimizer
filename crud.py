@@ -18,15 +18,6 @@ def create_video(session: Session, id_sub_category: int, file: UploadFile) -> Vi
     save_video(file, db_video.subcategory.name, db_video.subcategory.category.name)
     return db_video
 
-def create_category(session: Session, category: CategoryCreate):
-    db_category = Category(
-        name=category.name
-    )
-    session.add(db_category)
-    session.commit()
-    session.refresh(db_category)
-    return db_category
-
 def create_sub_category(session: Session, sub_category: SubCategoryCreate):
     db_sub_category = SubCategory(
         name=sub_category.name,
