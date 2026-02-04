@@ -2,7 +2,8 @@ import os
 from fastapi import UploadFile
 import shutil
 
-UPLOAD_DIR = "videos"
+BASE_DIR = r"C:\Users\LukaSarenac\Documents\Luka\videoOptimizer"
+UPLOAD_DIR = os.path.join(BASE_DIR, "videos")
 
 def save_video(file: UploadFile, sub_category: str, category: str):
     dir_path = os.path.join(UPLOAD_DIR, category, sub_category)
