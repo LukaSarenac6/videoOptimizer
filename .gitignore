@@ -16,3 +16,6 @@ env/
 
 # Claude
 .claude/
+
+# Videos
+videos/
