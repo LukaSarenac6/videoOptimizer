@@ -24,7 +24,7 @@ def add_video(
 @app.post("/videos", response_model=list[VideoRead])
 def add_videos(
     # Uncomment this later. Swagger automatically stores the List of integers as "1,1,1" so error 422 is raised
-    # For now use str instead of list[int]
+    # For now use str instead of list[int]. Dont forget to correct the code
     #id_sub_category: Annotated[list[int], Form()],
     id_sub_category_str: Annotated[str, Form()],
     files: list[UploadFile],
@@ -46,7 +46,7 @@ def add_videos(
         return videos
     except Exception:
         session.rollback()
-        raise 
+        raise
     
 
 @app.get("/videos", response_model=list[VideoRead])
