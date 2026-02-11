@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import './App.css'
+import MyButton from'./../components/MyButton'
 
 function App() {
   
@@ -20,13 +21,13 @@ function App() {
   return (
     <>
     <div>
-      <button className="btn-add" onClick={addCategory}>Add Category</button>
+      <MyButton label="Add Category" onClick={addCategory} className="btn-add"></MyButton>
     </div>
     <div>
-      <button className="btn-add" onClick={addSubCategory}>Add Sub-Category</button>
+      <MyButton label="Add Sub-Category" onClick={addSubCategory} className="btn-add"></MyButton>
     </div>
     <div>
-      <button className="btn-add" onClick={addVideo}>Add Video</button>
+      <MyButton label="Add Video" onClick={addVideo} className="btn-add"></MyButton>
       <input type='file'
       style={{display: 'none'}}
         ref={fileInputRef}
