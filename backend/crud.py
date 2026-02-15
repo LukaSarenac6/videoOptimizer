@@ -68,3 +68,11 @@ def create_user(session: Session, user: UserCreate) -> User:
 def get_user_by_email(session: Session, email: str) -> User | None:
     statement = select(User).where(User.email == email)
     return session.exec(statement).first()
+
+def authenticate_user(session: Session, email: str, password: str) -> User | None:
+    user = get_user_by_email(session, email)
+    if not user:
+        return None
+    if not password_hash.verify(password, user.hashed_password):
+        return None
+    return user

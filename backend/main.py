@@ -1,10 +1,13 @@
-from fastapi import FastAPI, Depends, UploadFile, Form, HTTPException
+from fastapi import FastAPI, Depends, UploadFile, Form, HTTPException, status
 from sqlmodel import Session
 from typing import Annotated
 from database import engine, create_db_and_tables
 from schemas import *
 from crud import *
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from config import *
+from datetime import datetime, timedelta, timezone
+import jwt
 
 app = FastAPI()
 
@@ -18,9 +21,36 @@ def get_session():
     with Session(engine) as session:
         yield session
 
-def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
-    # TODO: replace with real JWT decoding
-    pass
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
+
+def get_current_user(
+    token: Annotated[str, Depends(oauth2_scheme)],
+    session: Session = Depends(get_session),
+):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise credentials_exception
+    except jwt.InvalidTokenError:
+        raise credentials_exception
+    user = get_user_by_email(session, email)
+    if user is None:
+        raise credentials_exception
+    return user
 
 # --- Auth ---
 
@@ -34,6 +64,23 @@ def register(
         raise HTTPException(status_code=400, detail="Email already registered")
     return create_user(session, user)
 
+@app.post("/token")
+def login_for_access_token(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    session: Session = Depends(get_session)
+)-> Token:
+    user = authenticate_user(session, form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": user.email}, expires_delta=access_token_expires
+    )
+    return Token(access_token=access_token, token_type="bearer")
 # --- Categories ---
 
 @app.post("/category", response_model=CategoryRead)
