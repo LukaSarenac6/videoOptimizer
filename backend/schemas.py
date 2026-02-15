@@ -43,3 +43,7 @@ class UserRead(SQLModel):
     surname: str
     email: str
     is_admin: bool
+
+class Token(SQLModel):
+    access_token: str
+    token_type: str
