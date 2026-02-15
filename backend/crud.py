@@ -76,3 +76,18 @@ def authenticate_user(session: Session, email: str, password: str) -> User | Non
     if not password_hash.verify(password, user.hashed_password):
         return None
     return user
+
+def create_athlete(session: Session, athlete: AthleteCreate) -> Athlete:
+    db_athlete = Athlete(
+        name=athlete.name,
+        surname=athlete.surname,
+        email=athlete.email,
+    )
+    session.add(db_athlete)
+    session.commit()
+    session.refresh(db_athlete)
+    return db_athlete
+
+def get_athletes(session: Session):
+    statement = select(Athlete)
+    return session.exec(statement).all()
