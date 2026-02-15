@@ -4,6 +4,9 @@ from schemas import *
 from fastapi import UploadFile
 from storage import *
 from sqlalchemy.orm import selectinload
+from pwdlib import PasswordHash
+
+password_hash = PasswordHash.recommended()
 
 def create_video(session: Session, id_sub_category: int, file: UploadFile) -> Video:
     db_video = Video (
@@ -48,3 +51,20 @@ def get_sub_categories(session: Session):
 def get_categories(session: Session):
     statement = select(Category).options(selectinload(Category.sub_categories))
     return session.exec(statement).all()
+
+def create_user(session: Session, user: UserCreate) -> User:
+    db_user = User(
+        name=user.name,
+        surname=user.surname,
+        email=user.email,
+        hashed_password=password_hash.hash(user.password),
+        is_admin=False,
+    )
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
+    return db_user
+
+def get_user_by_email(session: Session, email: str) -> User | None:
+    statement = select(User).where(User.email == email)
+    return session.exec(statement).first()

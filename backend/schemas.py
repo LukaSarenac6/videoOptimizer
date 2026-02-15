@@ -30,3 +30,16 @@ class SubCategoryRead(SQLModel):
     id: int
     id_category: int
     category: Category
+
+class UserCreate(SQLModel):
+    name: str
+    surname: str
+    email: str
+    password: str
+
+class UserRead(SQLModel):
+    id: int
+    name: str
+    surname: str
+    email: str
+    is_admin: bool
