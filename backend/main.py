@@ -52,8 +52,9 @@ def get_current_user(
         raise credentials_exception
     return user
 
-# --- Auth ---
+# --- Auth (public) ---
 
+# Register a new coach account
 @app.post("/register", response_model=UserRead)
 def register(
     user: UserCreate,
@@ -64,11 +65,12 @@ def register(
         raise HTTPException(status_code=400, detail="Email already registered")
     return create_user(session, user)
 
+# Login with email and password, returns JWT access token
 @app.post("/token")
 def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
-    session: Session = Depends(get_session)
-)-> Token:
+    session: Session = Depends(get_session),
+) -> Token:
     user = authenticate_user(session, form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -81,30 +83,38 @@ def login_for_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
     return Token(access_token=access_token, token_type="bearer")
-# --- Categories ---
 
+# --- Categories (protected) ---
+
+# Create a new category
 @app.post("/category", response_model=CategoryRead)
 def add_category(
     category: CategoryCreate,
+    current_user: Annotated[User, Depends(get_current_user)],
     session: Session = Depends(get_session),
 ):
     return create_category(session, category)
 
+# Get all categories with their sub-categories
 @app.get("/categories", response_model=list[CategoryRead])
 def read_categories(
+    current_user: Annotated[User, Depends(get_current_user)],
     session: Session = Depends(get_session),
 ):
     return get_categories(session)
 
-# --- Sub Categories ---
+# --- Sub Categories (protected) ---
 
+# Create a new sub-category under a category
 @app.post("/sub_category", response_model=SubCategoryRead)
 def add_sub_category(
     sub_category: SubCategoryCreate,
+    current_user: Annotated[User, Depends(get_current_user)],
     session: Session = Depends(get_session),
 ):
     return create_sub_category(session, sub_category)
 
+# Get all sub-categories
 @app.get("/sub_categories", response_model=list[SubCategory])
 def read_sub_categories(
     current_user: Annotated[User, Depends(get_current_user)],
@@ -112,21 +122,25 @@ def read_sub_categories(
 ):
     return get_sub_categories(session)
 
-# --- Videos ---
+# --- Videos (protected) ---
 
+# Upload a single video to a sub-category
 @app.post("/video", response_model=VideoRead)
 def add_video(
     id_sub_category: Annotated[int, Form()],
     file: UploadFile,
+    current_user: Annotated[User, Depends(get_current_user)],
     session: Session = Depends(get_session),
 ):
     return create_video(session, id_sub_category, file)
 
+# Upload multiple videos with corresponding sub-category IDs
 @app.post("/videos", response_model=list[VideoRead])
 def add_videos(
     # TODO: Swagger stores list[int] as "1,1,1" causing 422. Using str workaround.
     id_sub_category_str: Annotated[str, Form()],
     files: list[UploadFile],
+    current_user: Annotated[User, Depends(get_current_user)],
     session: Session = Depends(get_session),
 ):
     id_sub_category = [int(x) for x in id_sub_category_str.split(',')]
@@ -145,8 +159,10 @@ def add_videos(
         session.rollback()
         raise
 
+# Get all videos
 @app.get("/videos", response_model=list[VideoRead])
 def read_videos(
+    current_user: Annotated[User, Depends(get_current_user)],
     session: Session = Depends(get_session),
 ):
     return get_videos(session)
