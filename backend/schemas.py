@@ -44,6 +44,17 @@ class UserRead(SQLModel):
     email: str
     is_admin: bool
 
+class AthleteCreate(SQLModel):
+    name: str
+    surname: str
+    email: str
+
+class AthleteRead(SQLModel):
+    id: int
+    name: str
+    surname: str
+    email: str
+
 class Token(SQLModel):
     access_token: str
     token_type: str

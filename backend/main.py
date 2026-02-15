@@ -166,3 +166,22 @@ def read_videos(
     session: Session = Depends(get_session),
 ):
     return get_videos(session)
+
+# --- Athletes (protected) ---
+
+# Add a new athlete
+@app.post("/athlete", response_model=AthleteRead)
+def add_athlete(
+    athlete: AthleteCreate,
+    current_user: Annotated[User, Depends(get_current_user)],
+    session: Session = Depends(get_session),
+):
+    return create_athlete(session, athlete)
+
+# Get all athletes
+@app.get("/athletes", response_model=list[AthleteRead])
+def read_athletes(
+    current_user: Annotated[User, Depends(get_current_user)],
+    session: Session = Depends(get_session),
+):
+    return get_athletes(session)
