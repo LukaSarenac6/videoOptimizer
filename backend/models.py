@@ -23,3 +23,18 @@ class Video(SQLModel, table=True):
 
     id_subcategory: int | None = Field(default=None, foreign_key="subcategory.id")
     subcategory: SubCategory = Relationship(back_populates="videos")
+
+class Athlete(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True) 
+    name: str
+    surname: str
+    email: str
+
+class User(SQLModel, table=True):
+    id: int | None = Field(default=None, primary_key=True)
+    name: str
+    surname: str
+    hashed_password: str
+    is_admin: bool
+
+    email: str
