@@ -1,40 +1,31 @@
-import { useRef } from 'react'
-import './App.css'
-import MyButton from'./../components/MyButton'
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { isLoggedIn } from "./api/client";
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
 
-function App() {
-  
-  const fileInputRef = useRef<HTMLInputElement>(null)
-
-  function addCategory() {
-    console.log("cat")
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  if (!isLoggedIn()) {
+    return <Navigate to="/login" replace />;
   }
-
-  function addSubCategory() {
-    console.log("sub-cat")
-  }
-
-  function addVideo() {
-    fileInputRef.current?.click()
-  }
-
-  return (
-    <>
-    <div>
-      <MyButton label="Add Category" onClick={addCategory} className="btn-add"></MyButton>
-    </div>
-    <div>
-      <MyButton label="Add Sub-Category" onClick={addSubCategory} className="btn-add"></MyButton>
-    </div>
-    <div>
-      <MyButton label="Add Video" onClick={addVideo} className="btn-add"></MyButton>
-      <input type='file'
-      style={{display: 'none'}}
-        ref={fileInputRef}
-        />
-    </div>
-    </>
-  )
+  return <>{children}</>;
 }
 
-export default App
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+export default App;

@@ -125,6 +125,7 @@ pip install -r backend/requirements.txt
 |---------|----------------|---------|
 | react | `npm install react` | UI library |
 | react-dom | `npm install react-dom` | React DOM rendering |
+| react-router-dom | `npm install react-router-dom` | Client-side routing |
 | vite | `npm install vite` | Build tool & dev server |
 | typescript | `npm install typescript` | Type checking |
 
