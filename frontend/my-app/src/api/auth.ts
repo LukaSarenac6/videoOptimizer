@@ -43,6 +43,10 @@ export interface UserRead {
   is_admin: boolean;
 }
 
+export function getMe(): Promise<UserRead> {
+  return apiRequest<UserRead>("/me");
+}
+
 export function registerUser(user: UserCreate): Promise<UserRead> {
   return apiRequest<UserRead>("/register", {
     method: "POST",

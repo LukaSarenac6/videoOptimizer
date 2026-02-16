@@ -1,11 +1,12 @@
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { removeToken } from "../api/client";
+import { useAuth } from "../context/AuthContext";
 import "./HomePage.css";
 
 export default function HomePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   function addCategory() {
     console.log("cat");
@@ -20,7 +21,7 @@ export default function HomePage() {
   }
 
   function handleLogout() {
-    removeToken();
+    logout();
     navigate("/login");
   }
 

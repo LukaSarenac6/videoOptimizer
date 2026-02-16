@@ -18,7 +18,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH"],
     allow_headers=["Authorization", "Content-Type"],
 )
 
@@ -44,6 +44,13 @@ def login_for_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
     return Token(access_token=access_token, token_type="bearer")
+
+# Get current user info (validates token)
+@app.get("/me", response_model=UserRead)
+def read_current_user(
+    current_user: Annotated[User, Depends(get_current_user)],
+):
+    return current_user
 
 # Register a new coach account (admin only)
 @app.post("/register", response_model=UserRead)
