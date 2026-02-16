@@ -32,8 +32,8 @@ export default function LoginPage() {
   return (
     <div className="login-container">
       <form className="login-form" onSubmit={handleSubmit}>
-        <h1>Video Optimizer</h1>
-        <p className="login-subtitle">Coach Login</p>
+        <h1>Human Performance Lab</h1>
+        <p className="login-subtitle">Login</p>
 
         {error && <div className="login-error">{error}</div>}
 
