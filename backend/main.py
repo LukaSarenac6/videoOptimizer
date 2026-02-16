@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, UploadFile, Form, HTTPException, status
+from fastapi.middleware.cors import CORSMiddleware
 from sqlmodel import Session
 from typing import Annotated
 from fastapi.security import OAuth2PasswordRequestForm
@@ -12,6 +13,14 @@ from auth import get_session, get_current_user, get_admin_user, create_access_to
 from models import User
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["Authorization", "Content-Type"],
+)
 
 create_db_and_tables()
 
