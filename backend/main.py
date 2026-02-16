@@ -8,25 +8,14 @@ from database import create_db_and_tables
 from schemas import *
 from crud import *
 from config import ACCESS_TOKEN_EXPIRE_MINUTES
-from auth import get_session, get_current_user, create_access_token
+from auth import get_session, get_current_user, get_admin_user, create_access_token
 from models import User
 
 app = FastAPI()
 
 create_db_and_tables()
 
-# --- Auth (public) ---
-
-# Register a new coach account
-@app.post("/register", response_model=UserRead)
-def register(
-    user: UserCreate,
-    session: Session = Depends(get_session),
-):
-    existing = get_user_by_email(session, user.email)
-    if existing:
-        raise HTTPException(status_code=400, detail="Email already registered")
-    return create_user(session, user)
+# --- Auth ---
 
 # Login with email and password, returns JWT access token
 @app.post("/token")
@@ -46,6 +35,18 @@ def login_for_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
     return Token(access_token=access_token, token_type="bearer")
+
+# Register a new coach account (admin only)
+@app.post("/register", response_model=UserRead)
+def register(
+    user: UserCreate,
+    admin: Annotated[User, Depends(get_admin_user)],
+    session: Session = Depends(get_session),
+):
+    existing = get_user_by_email(session, user.email)
+    if existing:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    return create_user(session, user)
 
 # --- Categories (protected) ---
 
