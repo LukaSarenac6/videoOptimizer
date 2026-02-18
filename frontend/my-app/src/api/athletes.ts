@@ -5,12 +5,14 @@ export interface Athlete {
   name: string;
   surname: string;
   email: string;
+  phone_number: string;
 }
 
 export interface AthleteCreate {
   name: string;
   surname: string;
   email: string;
+  phone_number: string;
 }
 
 export function getAthletes(): Promise<Athlete[]> {

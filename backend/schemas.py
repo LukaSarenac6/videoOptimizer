@@ -48,12 +48,14 @@ class AthleteCreate(SQLModel):
     name: str
     surname: str
     email: str
+    phone_number: str
 
 class AthleteRead(SQLModel):
     id: int
     name: str
     surname: str
     email: str
+    phone_number: str
 
 class Token(SQLModel):
     access_token: str

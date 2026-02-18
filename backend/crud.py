@@ -82,6 +82,7 @@ def create_athlete(session: Session, athlete: AthleteCreate) -> Athlete:
         name=athlete.name,
         surname=athlete.surname,
         email=athlete.email,
+        phone_number=athlete.phone_number,
     )
     session.add(db_athlete)
     session.commit()

@@ -25,10 +25,11 @@ class Video(SQLModel, table=True):
     subcategory: SubCategory = Relationship(back_populates="videos")
 
 class Athlete(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True) 
+    id: int | None = Field(default=None, primary_key=True)
     name: str
     surname: str
     email: str
+    phone_number: str
 
 class User(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
