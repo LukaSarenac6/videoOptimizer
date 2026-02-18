@@ -156,6 +156,12 @@ def add_athlete(
     current_user: Annotated[User, Depends(get_current_user)],
     session: Session = Depends(get_session),
 ):
+    existing = get_athlete_by_phone(session, athlete.phone_number)
+    if existing:
+        raise HTTPException(
+            status_code=400,
+            detail="An athlete with this phone number already exists",
+        )
     return create_athlete(session, athlete)
 
 # Get all athletes

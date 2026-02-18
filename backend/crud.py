@@ -89,6 +89,10 @@ def create_athlete(session: Session, athlete: AthleteCreate) -> Athlete:
     session.refresh(db_athlete)
     return db_athlete
 
+def get_athlete_by_phone(session: Session, phone_number: str) -> Athlete | None:
+    statement = select(Athlete).where(Athlete.phone_number == phone_number)
+    return session.exec(statement).first()
+
 def get_athletes(session: Session):
     statement = select(Athlete)
     return session.exec(statement).all()
