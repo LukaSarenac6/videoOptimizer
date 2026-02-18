@@ -99,3 +99,18 @@
   font-size: 0.9rem;
   text-align: center;
 }
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1rem;
+  }
+
+  .login-form {
+    padding: 2rem 1.5rem;
+  }
+
+  .login-form h1 {
+    font-size: 1.3rem;
+    white-space: normal;
+  }
+}

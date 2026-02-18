@@ -32,3 +32,9 @@
   background-color: #1e2d3d;
   border-color: #3b82f6;
 }
+
+@media (max-width: 768px) {
+  .home-actions {
+    max-width: 100%;
+  }
+}
