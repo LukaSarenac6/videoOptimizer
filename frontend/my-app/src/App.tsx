@@ -2,6 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import LoginPage from "./pages/LoginPage";
 import HomePage from "./pages/HomePage";
+import SessionsPage from "./pages/SessionsPage";
+import VideosPage from "./pages/VideosPage";
+import Layout from "./components/Layout";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -45,13 +48,16 @@ function App() {
             }
           />
           <Route
-            path="/"
             element={
               <ProtectedRoute>
-                <HomePage />
+                <Layout />
               </ProtectedRoute>
             }
-          />
+          >
+            <Route index element={<HomePage />} />
+            <Route path="/sessions" element={<SessionsPage />} />
+            <Route path="/videos" element={<VideosPage />} />
+          </Route>
         </Routes>
       </AuthProvider>
     </BrowserRouter>

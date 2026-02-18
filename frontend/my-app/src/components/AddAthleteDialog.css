@@ -1,0 +1,56 @@
+.athlete-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.athlete-form input {
+  background-color: #0f1923;
+  border: 1px solid #2a3a4a;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: #e0e7ff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.athlete-form input:focus {
+  border-color: #3b82f6;
+}
+
+.athlete-form input::placeholder {
+  color: #4a5568;
+}
+
+.athlete-form button {
+  background-color: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 0.25rem;
+}
+
+.athlete-form button:hover {
+  background-color: #2563eb;
+}
+
+.athlete-form button:disabled {
+  background-color: #1e3a5f;
+  cursor: not-allowed;
+}
+
+.athlete-form-error {
+  background-color: #1c1017;
+  border: 1px solid #991b1b;
+  color: #fca5a5;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: center;
+}
